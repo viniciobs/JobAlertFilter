@@ -1,4 +1,3 @@
-using HtmlAgilityPack;
 using JobAlertFilter.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -33,8 +32,12 @@ public class EmailScanner(
             var message = await inbox.GetMessageAsync(uid, cancellationToken);
             var htmlBody = message.HtmlBody;
 
-            var doc = new HtmlDocument();
-            doc.LoadHtml(htmlBody);
+            if (string.IsNullOrWhiteSpace(htmlBody))
+            {
+                continue;
+            }
+
+            var urls = EmailJobUrlExtractor.ExtractJobUrls(htmlBody);
         }
 
         await client.DisconnectAsync(true, cancellationToken);
