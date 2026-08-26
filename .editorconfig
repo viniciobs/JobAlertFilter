@@ -1,0 +1,54 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+
+# =========================
+# Namespaces
+# =========================
+
+csharp_style_namespace_declarations = file_scoped:error
+
+
+# =========================
+# Usings
+# =========================
+
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+dotnet_diagnostic.IDE0005.severity = warning
+
+
+# =========================
+# Formatting
+# =========================
+
+# Spaces
+csharp_space_after_comma = true
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_after_cast = true
+csharp_space_before_comma = false
+csharp_space_before_colon_in_inheritance_clause = false
+csharp_space_after_colon_in_inheritance_clause = true
+csharp_space_before_semicolon_in_for_statement = false
+csharp_space_after_semicolon_in_for_statement = true
+
+# Braces
+csharp_new_line_before_open_brace = all
+
+# Indentation
+indent_style = space
+indent_size = 4
+tab_width = 4
+
+# New lines
+csharp_new_line_before_members_in_chained_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_between_members_in_anonymous_types = true
+csharp_new_line_between_query_expression_clauses = true
