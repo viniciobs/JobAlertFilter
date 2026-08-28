@@ -10,6 +10,6 @@ public static partial class EmailScannerLogs
     [LoggerMessage(EventId = 2, Level = LogLevel.Information, Message = "Found {Count} unread emails.")]
     public static partial void EmailsFound(this ILogger logger, int count);
 
-    [LoggerMessage(EventId = 3, Level = LogLevel.Information, Message = "Processing email {Index} of {Count}.")]
-    public static partial void Processing(this ILogger logger, int index, int count);
+    [LoggerMessage(EventId = 3, Level = LogLevel.Information, Message = "Processing email {Index} of {Count}. Start time: {StartTime:HH:mm:ss}")]
+    public static partial void Processing(this ILogger logger, int index, int count, DateTime startTime);
 }

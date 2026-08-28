@@ -36,7 +36,9 @@ It connects to your Gmail account via IMAP, reads unread emails from a specific 
         "EmailSettings": {
             "Email": "your-email@gmail.com",
             "AppPassword": "your-16-char-app-password",
-            "SenderEmail": "alerts@jobboard.com" // The specific sender to filter
+            "SenderEmail": "alerts@jobboard.com", // The specific sender to filter
+            "ImapOperationTimeoutSeconds": 30, // Timeout (seconds) for retrieving emails only
+            "ProcessSingleEmailTimeoutMinutes": 5 // Timeout (minutes) for processing each email
         },
         "Profile": {
             "WorkModes": ["Remote"],

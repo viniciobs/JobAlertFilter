@@ -25,15 +25,12 @@ builder.Services
 
 using var host = builder.Build();
 
-var cancellationToken = host.Services
-    .GetRequiredService<IHostApplicationLifetime>()
-    .ApplicationStopping;
-
 var scanner = host.Services.GetRequiredService<EmailScanner>();
+var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
 
 try
 {
-    await scanner.RunAsync(cancellationToken);
+    await scanner.RunAsync(lifetime.ApplicationStopping);
 }
 catch (Exception ex)
 {

@@ -19,17 +19,20 @@ public class EmailScanner(
 
         using var client = new MailKit.Net.Imap.ImapClient();
 
-        await client.ConnectAsync("imap.gmail.com", 993, true, cancellationToken);
-        await client.AuthenticateAsync(config.Value.Email, config.Value.AppPassword, cancellationToken);
+        using var connectionCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        connectionCts.CancelAfter(TimeSpan.FromSeconds(config.Value.ImapOperationTimeoutSeconds));
+
+        await client.ConnectAsync("imap.gmail.com", 993, true, connectionCts.Token);
+        await client.AuthenticateAsync(config.Value.Email, config.Value.AppPassword, connectionCts.Token);
 
         var inbox = client.Inbox;
 
-        await inbox.OpenAsync(MailKit.FolderAccess.ReadOnly, cancellationToken);
+        await inbox.OpenAsync(MailKit.FolderAccess.ReadOnly, connectionCts.Token);
 
         var query = MailKit.Search.SearchQuery.NotSeen
             .And(MailKit.Search.SearchQuery.FromContains(config.Value.SearchFromEmail));
 
-        var uids = await inbox.SearchAsync(query, cancellationToken);
+        var uids = await inbox.SearchAsync(query, connectionCts.Token);
 
         EmailScannerLogs.EmailsFound(logger, uids.Count);
 
@@ -37,20 +40,37 @@ public class EmailScanner(
         {
             var uid = uids[i];
 
-            EmailScannerLogs.Processing(logger, i + 1, uids.Count);
-
-            var message = await inbox.GetMessageAsync(uid, cancellationToken);
-            var htmlBody = message.HtmlBody;
-
-            if (string.IsNullOrWhiteSpace(htmlBody))
+            try
             {
-                continue;
-            }
+                EmailScannerLogs.Processing(logger, i + 1, uids.Count, DateTime.Now);
 
-            var analysisResult = await AnalyzeEmailAsync(htmlBody, cancellationToken);
+                using var processingCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                processingCts.CancelAfter(TimeSpan.FromMinutes(config.Value.ProcessSingleEmailTimeoutMinutes));
+
+                var message = await inbox.GetMessageAsync(uid, processingCts.Token);
+                var htmlBody = message.HtmlBody;
+
+                if (string.IsNullOrWhiteSpace(htmlBody))
+                {
+                    continue;
+                }
+
+                var analysisResult = await AnalyzeEmailAsync(htmlBody, processingCts.Token);
+            }
+            catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+            {
+                logger.LogWarning("Timed out processing message {Uid}", uid);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to process message {Uid}", uid);
+            }
         }
 
-        await client.DisconnectAsync(true, cancellationToken);
+        if (client.IsConnected)
+        {
+            await client.DisconnectAsync(true, CancellationToken.None);
+        }
     }
 
     private async Task<AnalysisResult> AnalyzeEmailAsync(string emailHtml, CancellationToken cancellationToken)
