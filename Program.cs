@@ -1,10 +1,10 @@
-﻿using JobAlertFilter.Configuration;
+﻿using JobAlertFilter.Extensions;
+using JobAlertFilter.Options;
 using JobAlertFilter.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -13,15 +13,15 @@ builder.Configuration
     .AddJsonFile($"Configuration/appsettings.local.json", optional: true);
 
 builder.Services
-    .AddOptions<AppConfiguration>()
-    .Bind(builder.Configuration.GetSection("AppConfiguration"))
-    .Validate(x => x.IsValid(), "AppConfiguration is invalid. Fill all the required fields in appsettings.json.")
-    .ValidateOnStart();
+    .AddAndValidateOptions<AppOptions>(builder.Configuration, "AppConfiguration")
+    .AddAndValidateOptions<ProfileOptions>(builder.Configuration, "Profile")
+    .AddAndValidateOptions<OllamaOptions>(builder.Configuration, "Ollama");
 
-builder.Services.AddSingleton(sp =>
-    sp.GetRequiredService<IOptions<AppConfiguration>>().Value);
-
-builder.Services.AddTransient<EmailScanner>();
+builder.Services
+    .AddSingleton<EmailScanner>()
+    .AddSingleton<PromptLoader>()
+    .AddSingleton<OllamaService>()
+    .AddSingleton<JobAnalyzer>();
 
 using var host = builder.Build();
 

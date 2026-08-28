@@ -1,6 +1,6 @@
-namespace JobAlertFilter.Configuration;
+namespace JobAlertFilter.Options;
 
-public record AppConfiguration
+public record AppOptions: IOptionValidator
 {
     public required string Email { get; init; }
     public required string AppPassword { get; init; }
