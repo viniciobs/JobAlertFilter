@@ -38,6 +38,17 @@ It connects to your Gmail account via IMAP, reads unread emails from a specific 
             "AppPassword": "your-16-char-app-password",
             "SenderEmail": "alerts@jobboard.com" // The specific sender to filter
         },
+        "Profile": {
+            "WorkModes": ["Remote"],
+            "Locations": ["Brazil", "LATAM", "Global Remote"],
+            "PrimaryStack": [".NET", "C#", "Azure", "SQL Server"],
+            "SecondaryStack": ["React", "TypeScript", "Docker", "Kubernetes"],
+            "MinYearsExperience": 5,
+            "Languages": ["Portuguese", "English"],
+            "Roles": ["Senior Backend Engineer", "Tech Lead", "Staff Engineer"],
+            "AvoidKeywords": ["PHP", "Ruby", "WordPress", "Joomla", "5+ years in Java only" ],
+            "MustHaveKeywords": ["C#", ".NET"]
+        },
         "OllamaSettings": {
             "Endpoint": "http://localhost:11434",
             "ModelName": "llama3.2" // Or your preferred model
