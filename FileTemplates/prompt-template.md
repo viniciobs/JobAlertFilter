@@ -48,11 +48,27 @@ Do not assume that information exists if it is not present in the job posting.
 Do not invent requirements or candidate information.
 Do not treat similar technologies as identical unless the job posting explicitly indicates they are equivalent.
 
+JOB URL
+
+Extract the URL of the job posting from the JOB POSTING content.
+
+URL rules:
+- Use the actual job posting URL found in the email content.
+- Do not invent or guess a URL.
+- Do not use URLs that belong to LinkedIn tracking, unsubscribe links, images, or unrelated content.
+- If multiple URLs point to the same job, use the cleanest job posting URL.
+- If the job posting URL cannot be found, return an empty string.
+
 OUTPUT RULES
 
 isMatch:
 - true only when all required matching conditions are satisfied.
 - false when any required condition fails.
+
+url:
+- The URL of the job posting extracted from the JOB POSTING content.
+- Return the complete URL.
+- Return an empty string if no job posting URL can be identified.
 
 confidenceScore:
 - 90-100 = excellent match.

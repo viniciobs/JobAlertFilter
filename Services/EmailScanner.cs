@@ -9,8 +9,9 @@ namespace JobAlertFilter.Services;
 public class EmailScanner(
     IOptions<AppOptions> config,
     IOptions<ProfileOptions> profile,
-    PromptLoader promptLoader,
+    FileContentLoader promptLoader,
     OllamaService ollama,
+    ResultWriter resultWriter,
     ILogger<EmailScanner> logger)
 {
     public async Task RunAsync(CancellationToken cancellationToken)
@@ -36,6 +37,8 @@ public class EmailScanner(
 
         EmailScannerLogs.EmailsFound(logger, uids.Count);
 
+        var analysisResults = new List<AnalysisResult>();
+
         for (var i = 0; i < uids.Count; i++)
         {
             var uid = uids[i];
@@ -55,7 +58,8 @@ public class EmailScanner(
                     continue;
                 }
 
-                var analysisResult = await AnalyzeEmailAsync(htmlBody, processingCts.Token);
+                var result = await AnalyzeEmailAsync(htmlBody, processingCts.Token);
+                analysisResults.Add(result);
             }
             catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
             {
@@ -71,6 +75,10 @@ public class EmailScanner(
         {
             await client.DisconnectAsync(true, CancellationToken.None);
         }
+
+        await resultWriter.WriteAsync(analysisResults, cancellationToken);
+
+        EmailScannerLogs.Finished(logger, DateTime.Now);
     }
 
     private async Task<AnalysisResult> AnalyzeEmailAsync(string emailHtml, CancellationToken cancellationToken)
@@ -80,7 +88,7 @@ public class EmailScanner(
         var replacements = profile.Value.ToReplacements();
         replacements["EmailContent"] = plainText;
 
-        var prompt = await promptLoader.LoadAsync("job-analysis", replacements);
+        var prompt = await promptLoader.LoadAsync("prompt-template", replacements);
 
         return await ollama.AnalyzeAsync(prompt, cancellationToken);
     }

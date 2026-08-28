@@ -19,9 +19,10 @@ builder.Services
 
 builder.Services
     .AddSingleton<EmailScanner>()
-    .AddSingleton<PromptLoader>()
+    .AddSingleton<FileContentLoader>()
     .AddSingleton<OllamaService>()
-    .AddSingleton<JobAnalyzer>();
+    .AddSingleton<JobAnalyzer>()
+    .AddSingleton<ResultWriter>();
 
 using var host = builder.Build();
 
@@ -36,4 +37,9 @@ catch (Exception ex)
 {
     var logger = host.Services.GetRequiredService<ILogger<Program>>();
     logger.LogError(ex, "An error occurred while running the email scanner.");
+}
+finally
+{
+    Console.ReadKey();
+    lifetime.StopApplication();
 }

@@ -1,13 +1,12 @@
-using JobAlertFilter.Options;
-
 namespace JobAlertFilter.Extensions;
 
-public static class ProfileExtensions
+public static class TemplateExtensions
 {
-    public static Dictionary<string, string> ToReplacements(this ProfileOptions profile)
+    public static Dictionary<string, string> ToReplacements<T>(this T profile)
+        where T : class, new()
     {
         var dict = new Dictionary<string, string>();
-        var props = typeof(ProfileOptions).GetProperties();
+        var props = typeof(T).GetProperties();
 
         foreach (var prop in props)
         {

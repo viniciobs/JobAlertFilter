@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 namespace JobAlertFilter.Services;
 
 public class JobAnalyzer(
-    PromptLoader promptLoader,
+    FileContentLoader promptLoader,
     OllamaService ollama,
     IOptions<ProfileOptions> profile)
 {

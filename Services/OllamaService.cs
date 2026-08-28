@@ -25,6 +25,10 @@ public class OllamaService
             {
                 type = "boolean"
             },
+            url = new
+            {
+                type = "string"
+            },
             confidenceScore = new
             {
                 type = "integer",
@@ -64,7 +68,8 @@ public class OllamaService
             "matchedCriteria",
             "missingOrConcerns",
             "recommendation",
-            "reasoning"
+            "reasoning",
+            "url"
         }
     };
 

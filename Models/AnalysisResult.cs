@@ -3,6 +3,7 @@ namespace JobAlertFilter.Models;
 public record AnalysisResult
 {
     public bool IsMatch { get; init; }
+    public string Url { get; init; } = "";
     public int ConfidenceScore { get; init; }
     public List<string> MatchedCriteria { get; init; } = [];
     public List<string> MissingOrConcerns { get; init; } = [];

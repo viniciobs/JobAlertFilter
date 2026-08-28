@@ -12,4 +12,7 @@ public static partial class EmailScannerLogs
 
     [LoggerMessage(EventId = 3, Level = LogLevel.Information, Message = "Processing email {Index} of {Count}. Start time: {StartTime:HH:mm:ss}")]
     public static partial void Processing(this ILogger logger, int index, int count, DateTime startTime);
+
+    [LoggerMessage(EventId = 4, Level = LogLevel.Information, Message = "Finished processing. End time: {EndTime:HH:mm:ss}")]
+    public static partial void Finished(this ILogger logger, DateTime endTime);
 }

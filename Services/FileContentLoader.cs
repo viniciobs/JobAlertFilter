@@ -1,8 +1,8 @@
 namespace JobAlertFilter.Services;
 
-public partial class PromptLoader
+public partial class FileContentLoader
 {
-    private readonly string promptDirectory = Path.Combine(AppContext.BaseDirectory, "Prompts");
+    private readonly string promptDirectory = Path.Combine(AppContext.BaseDirectory, "FileTemplates");
 
     public async Task<string> LoadAsync(string promptName, Dictionary<string, string> replacements)
     {
@@ -10,7 +10,7 @@ public partial class PromptLoader
 
         if (!File.Exists(path))
         {
-            throw new FileNotFoundException($"Prompt file not found: {path}");
+            throw new FileNotFoundException($"File not found: {path}");
         }
 
         var template = await File.ReadAllTextAsync(path);
@@ -25,7 +25,7 @@ public partial class PromptLoader
         if (remaining.Count > 0)
         {
             var keys = string.Join(", ", remaining.Select(m => m.Groups[1].Value));
-            throw new InvalidOperationException($"Unfilled placeholders in prompt: {keys}");
+            throw new InvalidOperationException($"Unfilled placeholders in file {path}: {keys}");
         }
 
         return template;
