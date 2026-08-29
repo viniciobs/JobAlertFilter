@@ -1,10 +1,13 @@
 ﻿using JobAlertFilter.Extensions;
 using JobAlertFilter.Options;
 using JobAlertFilter.Services;
+using JobAlertFilter.Services.Providers;
+using JobAlertFilter.Services.Providers.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -15,7 +18,7 @@ builder.Configuration
 builder.Services
     .AddAndValidateOptions<AppOptions>(builder.Configuration, "AppConfiguration")
     .AddAndValidateOptions<ProfileOptions>(builder.Configuration, "Profile")
-    .AddAndValidateOptions<OllamaOptions>(builder.Configuration, "Ollama");
+    .AddAndValidateOptions<AIProviderOptions>(builder.Configuration, "AIProvider");
 
 builder.Services
     .AddSingleton<EmailScanner>()
@@ -23,6 +26,17 @@ builder.Services
     .AddSingleton<OllamaService>()
     .AddSingleton<JobAnalyzer>()
     .AddSingleton<ResultWriter>();
+
+builder.Services.AddSingleton<IAiService>(sp =>
+{
+    var opts = sp.GetRequiredService<IOptions<AIProviderOptions>>().Value;
+    return opts.Provider.ToLowerInvariant() switch
+    {
+        "ollama" => sp.GetRequiredService<OllamaService>(),
+        // add "claude", "gemini" here later
+        _ => throw new NotSupportedException($"AI provider '{opts.Provider}' is not supported.")
+    };
+});
 
 using var host = builder.Build();
 

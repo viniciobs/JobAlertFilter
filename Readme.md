@@ -81,3 +81,6 @@ The application will:
 - `Services/GmailService.cs`: Handles IMAP connection, authentication, and email fetching using the `MailKit` library.
 - `Services/AnalysisService.cs`: Constructs a prompt using the email content and templates from the `Prompts/` folder, sends it to the Ollama API, and parses the JSON response into a structured model (`Models/AnalysisResult.cs`).
 `Program.cs`: Orchestrates the workflow and handles dependency injection.
+
+## Future Improvements
+Get further details from the Job Posting page. It currently gets the details from the email.

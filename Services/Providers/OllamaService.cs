@@ -2,14 +2,15 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using JobAlertFilter.Models;
 using JobAlertFilter.Options;
+using JobAlertFilter.Services.Providers.Abstractions;
 using Microsoft.Extensions.Options;
 
-namespace JobAlertFilter.Services;
+namespace JobAlertFilter.Services.Providers;
 
-public class OllamaService
+public class OllamaService: IAiService
 {
     private readonly HttpClient client;
-    private readonly OllamaOptions opts;
+    private readonly AIProviderOptions opts;
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
@@ -77,7 +78,7 @@ public class OllamaService
         }
     };
 
-    public OllamaService(IOptions<OllamaOptions> opts)
+    public OllamaService(IOptions<AIProviderOptions> opts)
     {
         this.opts = opts.Value;
 
