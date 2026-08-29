@@ -40,6 +40,5 @@ catch (Exception ex)
 }
 finally
 {
-    Console.ReadKey();
     lifetime.StopApplication();
 }
