@@ -1,13 +1,12 @@
-**Is Match:** {{IsMatch}}    
-**Url:** {{Url}}    
+**Job:** [{{Title}}]({{Url}})    
 **Confidence Score:** {{ConfidenceScore}}/100    
 **Recommendation:** {{Recommendation}}    
 
-### Reasoning
+### Reasoning    
 {{Reasoning}}    
 
-### Matched Criteria
+### Matched Criteria    
 {{MatchedCriteria}}    
 
-### Missing / Concerns
+### Missing / Concerns    
 {{MissingOrConcerns}}    

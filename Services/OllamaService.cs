@@ -18,52 +18,56 @@ public class OllamaService
 
     private static readonly object ResponseSchema = new
     {
-        type = "object",
-        properties = new
+        type = "array",
+        items = new
         {
-            isMatch = new
+            type = "object",
+            properties = new
             {
-                type = "boolean"
-            },
-            url = new
-            {
-                type = "string"
-            },
-            confidenceScore = new
-            {
-                type = "integer",
-                minimum = 0,
-                maximum = 100
-            },
-            matchedCriteria = new
-            {
-                type = "array",
-                items = new
+                title = new
+                {
+                    type = "string"
+                },
+                url = new
+                {
+                    type = "string"
+                },
+                confidenceScore = new
+                {
+                    type = "integer",
+                    minimum = 0,
+                    maximum = 100
+                },
+                matchedCriteria = new
+                {
+                    type = "array",
+                    items = new
+                    {
+                        type = "string"
+                    }
+                },
+                missingOrConcerns = new
+                {
+                    type = "array",
+                    items = new
+                    {
+                        type = "string"
+                    }
+                },
+                recommendation = new
+                {
+                    type = "string",
+                    @enum = new[] { "Apply", "Maybe", "Skip" }
+                },
+                reasoning = new
                 {
                     type = "string"
                 }
-            },
-            missingOrConcerns = new
-            {
-                type = "array",
-                items = new
-                {
-                    type = "string"
-                }
-            },
-            recommendation = new
-            {
-                type = "string",
-                @enum = new[] { "Apply", "Maybe", "Skip" }
-            },
-            reasoning = new
-            {
-                type = "string"
             }
         },
         required = new[]
         {
-            "isMatch",
+            "title",
             "confidenceScore",
             "matchedCriteria",
             "missingOrConcerns",
@@ -84,7 +88,7 @@ public class OllamaService
         };
     }
 
-    public async Task<AnalysisResult> AnalyzeAsync(
+    public async Task<IList<AnalysisResult>> AnalyzeAsync(
         string prompt,
         CancellationToken cancellationToken)
     {
@@ -119,7 +123,7 @@ public class OllamaService
                 "Ollama returned an empty response.");
         }
 
-        return JsonSerializer.Deserialize<AnalysisResult>(
+        return JsonSerializer.Deserialize<IList<AnalysisResult>>(
             ollamaResponse.Response,
             SerializerOptions)
             ?? throw new JsonException(

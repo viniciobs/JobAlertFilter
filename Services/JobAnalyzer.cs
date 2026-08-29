@@ -10,14 +10,19 @@ public class JobAnalyzer(
     OllamaService ollama,
     IOptions<ProfileOptions> profile)
 {
-    public async Task<AnalysisResult> AnalyzeEmailAsync(string emailHtml, CancellationToken cancellationToken)
+    public async Task<IList<AnalysisResult>> AnalyzeEmailAsync(string emailHtml, CancellationToken cancellationToken)
     {
         var plainText = emailHtml.ToPlainText();
+
+        if (string.IsNullOrWhiteSpace(plainText))
+        {
+            return [];
+        }
 
         var replacements = profile.Value.ToReplacements();
         replacements["EmailContent"] = plainText;
 
-        var prompt = await promptLoader.LoadAsync("job-analysis", replacements);
+        var prompt = await promptLoader.LoadAsync("prompt-template", replacements);
 
         return await ollama.AnalyzeAsync(prompt, cancellationToken);
     }
