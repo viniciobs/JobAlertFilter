@@ -75,12 +75,9 @@ The application will:
 1. Connect to your Gmail account using the provided credentials.
 2. Search for unread emails from the configured `SenderEmail`.
 3. For each new email, send its content to the Ollama API for analysis.
-4. Display the analysis results (e.g., Job Title, Company, Summary) in the console.
+4. Generate a `.md` file containing the analysis results (e.g., job title, url and reasoning) and save it to the directory specified by `OutputDirectory` in `appsettings.json`.
 
 ## How It Works (Brief Technical Overview)
 - `Services/GmailService.cs`: Handles IMAP connection, authentication, and email fetching using the `MailKit` library.
 - `Services/AnalysisService.cs`: Constructs a prompt using the email content and templates from the `Prompts/` folder, sends it to the Ollama API, and parses the JSON response into a structured model (`Models/AnalysisResult.cs`).
 `Program.cs`: Orchestrates the workflow and handles dependency injection.
-
-## Future Improvements
-Implement a more sophisticated output (e.g., saving results to a markdown or html file).
