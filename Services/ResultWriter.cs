@@ -14,7 +14,7 @@ public class ResultWriter(
     {
         var filePath = Path.Combine(
             appOptions.Value.OutputDirectory,
-            DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
+            $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.md");
 
         var fileContent = new StringBuilder("# Analysis Results");
         fileContent.AppendLine();
