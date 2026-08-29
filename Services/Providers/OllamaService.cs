@@ -7,88 +7,9 @@ using Microsoft.Extensions.Options;
 
 namespace JobAlertFilter.Services.Providers;
 
-public class OllamaService: IAiService
+public class OllamaService(IOptions<AIProviderOptions> opts)
+    : AiServiceBase(opts), IAiService
 {
-    private readonly HttpClient client;
-    private readonly AIProviderOptions opts;
-
-    private static readonly JsonSerializerOptions SerializerOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
-    private static readonly object ResponseSchema = new
-    {
-        type = "array",
-        items = new
-        {
-            type = "object",
-            properties = new
-            {
-                title = new
-                {
-                    type = "string"
-                },
-                url = new
-                {
-                    type = "string"
-                },
-                confidenceScore = new
-                {
-                    type = "integer",
-                    minimum = 0,
-                    maximum = 100
-                },
-                matchedCriteria = new
-                {
-                    type = "array",
-                    items = new
-                    {
-                        type = "string"
-                    }
-                },
-                missingOrConcerns = new
-                {
-                    type = "array",
-                    items = new
-                    {
-                        type = "string"
-                    }
-                },
-                recommendation = new
-                {
-                    type = "string",
-                    @enum = new[] { "Apply", "Maybe", "Skip" }
-                },
-                reasoning = new
-                {
-                    type = "string"
-                }
-            }
-        },
-        required = new[]
-        {
-            "title",
-            "confidenceScore",
-            "matchedCriteria",
-            "missingOrConcerns",
-            "recommendation",
-            "reasoning",
-            "url"
-        }
-    };
-
-    public OllamaService(IOptions<AIProviderOptions> opts)
-    {
-        this.opts = opts.Value;
-
-        client = new HttpClient
-        {
-            BaseAddress = new Uri(this.opts.BaseUrl),
-            Timeout = Timeout.InfiniteTimeSpan
-        };
-    }
-
     public async Task<IList<AnalysisResult>> AnalyzeAsync(
         string prompt,
         CancellationToken cancellationToken)

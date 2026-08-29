@@ -24,6 +24,7 @@ builder.Services
     .AddSingleton<EmailScanner>()
     .AddSingleton<FileContentLoader>()
     .AddSingleton<OllamaService>()
+    .AddSingleton<OpenAIService>()
     .AddSingleton<JobAnalyzer>()
     .AddSingleton<ResultWriter>();
 
@@ -33,7 +34,7 @@ builder.Services.AddSingleton<IAiService>(sp =>
     return opts.Provider.ToLowerInvariant() switch
     {
         "ollama" => sp.GetRequiredService<OllamaService>(),
-        // add "claude", "gemini" here later
+        "groq" => sp.GetRequiredService<OpenAIService>(),
         _ => throw new NotSupportedException($"AI provider '{opts.Provider}' is not supported.")
     };
 });
