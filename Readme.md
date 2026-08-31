@@ -33,7 +33,7 @@ It connects to your Gmail account via IMAP, reads unread emails from a specific 
     - Replace the placeholder values with your information:
     ```json
     {
-        "EmailSettings": {
+        "AppConfiguration": {
             "Email": "your-email@gmail.com",
             "AppPassword": "your-16-char-app-password",
             "SenderEmail": "alerts@jobboard.com", // The specific sender to filter
