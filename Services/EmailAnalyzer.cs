@@ -1,17 +1,19 @@
 using JobAlertFilter.Extensions;
 using JobAlertFilter.Models;
 using JobAlertFilter.Options;
+using JobAlertFilter.Services.Abstractions;
 using JobAlertFilter.Services.Providers.Abstractions;
 using Microsoft.Extensions.Options;
 
 namespace JobAlertFilter.Services;
 
-public class JobAnalyzer(
+public class EmailAnalyzer(
     FileContentLoader promptLoader,
     IAiService aiService,
     IOptions<ProfileOptions> profile)
+    : IJobAnalyzer
 {
-    public async Task<IList<AnalysisResult>> AnalyzeEmailAsync(string emailHtml, CancellationToken cancellationToken)
+    public async Task<IList<AnalysisResult>> AnalyzeAsync(string emailHtml, CancellationToken cancellationToken)
     {
         var plainText = emailHtml.ToPlainText();
 

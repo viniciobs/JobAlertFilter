@@ -1,5 +1,6 @@
 using JobAlertFilter.Models;
 using JobAlertFilter.Options;
+using JobAlertFilter.Services.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -8,7 +9,7 @@ namespace JobAlertFilter.Services;
 public class EmailScanner(
     IOptions<AppOptions> config,
     ResultWriter resultWriter,
-    JobAnalyzer jobAnalyzer,
+    IJobAnalyzer jobAnalyzer,
     ILogger<EmailScanner> logger)
 {
     public async Task RunAsync(CancellationToken cancellationToken)
@@ -55,7 +56,7 @@ public class EmailScanner(
                     continue;
                 }
 
-                var result = await jobAnalyzer.AnalyzeEmailAsync(htmlBody, processingCts.Token);
+                var result = await jobAnalyzer.AnalyzeAsync(htmlBody, processingCts.Token);
 
                 if (result.Count > 0)
                 {

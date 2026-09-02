@@ -1,6 +1,7 @@
 ﻿using JobAlertFilter.Extensions;
 using JobAlertFilter.Options;
 using JobAlertFilter.Services;
+using JobAlertFilter.Services.Abstractions;
 using JobAlertFilter.Services.Providers;
 using JobAlertFilter.Services.Providers.Abstractions;
 using Microsoft.Extensions.Configuration;
@@ -25,8 +26,18 @@ builder.Services
     .AddSingleton<FileContentLoader>()
     .AddSingleton<OllamaService>()
     .AddSingleton<OpenAIService>()
-    .AddSingleton<JobAnalyzer>()
+    .AddSingleton<EmailAnalyzer>()
     .AddSingleton<ResultWriter>();
+
+builder.Services.AddSingleton<IJobAnalyzer>(sp =>
+{
+    var opts = sp.GetRequiredService<IOptions<AppOptions>>().Value;
+    return opts.AnalysisTarget.ToLowerInvariant() switch
+    {
+        "email" => sp.GetRequiredService<EmailAnalyzer>(),
+        _ => throw new NotSupportedException($"The value provided for '{opts.AnalysisTarget}' is not supported. Please use any of the following: '{string.Join("', '", AppOptions.AnalysisTargets)}'.")
+    };
+});
 
 builder.Services.AddSingleton<IAiService>(sp =>
 {
