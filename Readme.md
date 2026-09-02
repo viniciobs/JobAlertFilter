@@ -40,7 +40,7 @@ It connects to your Gmail account via IMAP, reads unread emails from a specific 
             "ImapOperationTimeoutSeconds": 30, // Timeout (seconds) for retrieving emails only
             "ProcessSingleEmailTimeoutMinutes": 5, // Timeout (minutes) for processing each email
             "OutputDirectory": "C:/Users/User/Projects/JobAlertFilter/Results",
-            "AnalysisTarget": "email | page-details" 
+            "AnalysisTarget": "email | linkedin" 
         },
         "Profile": {
             "WorkModes": ["Remote"],
@@ -84,4 +84,5 @@ The application will:
 `Program.cs`: Orchestrates the workflow and handles dependency injection.
 
 ## Future Improvements
-Get further details from the Job Posting page. It currently gets the details from the email.
+- Get further details from the Job Posting page. It currently gets the details from the email.
+- Work on avoiding hitting AI APIs too frequently.

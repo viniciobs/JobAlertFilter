@@ -27,6 +27,7 @@ builder.Services
     .AddSingleton<OllamaService>()
     .AddSingleton<OpenAIService>()
     .AddSingleton<EmailAnalyzer>()
+    .AddSingleton<LinkedInAnalyzer>()
     .AddSingleton<ResultWriter>();
 
 builder.Services.AddSingleton<IJobAnalyzer>(sp =>
@@ -35,6 +36,7 @@ builder.Services.AddSingleton<IJobAnalyzer>(sp =>
     return opts.AnalysisTarget.ToLowerInvariant() switch
     {
         "email" => sp.GetRequiredService<EmailAnalyzer>(),
+        "linkedin" => sp.GetRequiredService<LinkedInAnalyzer>(),
         _ => throw new NotSupportedException($"The value provided for '{opts.AnalysisTarget}' is not supported. Please use any of the following: '{string.Join("', '", AppOptions.AnalysisTargets)}'.")
     };
 });

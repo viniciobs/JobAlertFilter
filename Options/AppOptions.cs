@@ -2,7 +2,7 @@ namespace JobAlertFilter.Options;
 
 public record AppOptions: IOptionValidator
 {
-    public static readonly string[] AnalysisTargets = ["email", "page-details"];
+    public static readonly string[] AnalysisTargets = ["email", "linkedin"];
     public required string Email { get; init; }
     public required string AppPassword { get; init; }
     public required string SearchFromEmail { get; init; }
