@@ -8,17 +8,35 @@ public static partial class HtmlExtensions
 {
     private static readonly int MaxLength = 8_000;
 
-    public static string? ToPlainText(this string html)
+    public static IEnumerable<string> ToJobUrls(this string html)
     {
-        if (string.IsNullOrWhiteSpace(html))
+        var jobCards = html.GetJobCards();
+
+        if (jobCards is null)
         {
-            return string.Empty;
+            return [];
         }
 
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
+        var jobUrls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-        var jobCards = doc.DocumentNode.SelectNodes("//td[@data-test-id='job-card']");
+        for (var i = 0; i < jobCards.Count; i++)
+        {
+            var jobUrl = jobCards[i].InnerHtml.ExtractJobUrls();
+
+            if (string.IsNullOrWhiteSpace(jobUrl))
+            {
+                continue;
+            }
+
+            jobUrls.Add(jobUrl);
+        }
+
+        return jobUrls;
+    }
+
+    public static string? ToPlainText(this string html)
+    {
+        var jobCards = html.GetJobCards();
 
         if (jobCards is null)
         {
@@ -83,6 +101,19 @@ public static partial class HtmlExtensions
         }
 
         return string.Empty;
+    }
+
+    private static HtmlNodeCollection? GetJobCards(this string html)
+    {
+        if (string.IsNullOrWhiteSpace(html))
+        {
+            return null;
+        }
+
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        return doc.DocumentNode.SelectNodes("//td[@data-test-id='job-card']");
     }
 
     [System.Text.RegularExpressions.GeneratedRegex(@"\s+")]

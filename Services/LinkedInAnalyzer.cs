@@ -1,3 +1,4 @@
+using JobAlertFilter.Extensions;
 using JobAlertFilter.Models;
 using JobAlertFilter.Services.Abstractions;
 
@@ -5,8 +6,17 @@ namespace JobAlertFilter.Services;
 
 public class LinkedInAnalyzer: IJobAnalyzer
 {
-    public Task<IList<AnalysisResult>> AnalyzeAsync(string content, CancellationToken cancellationToken)
+    public async Task<IList<AnalysisResult>> AnalyzeAsync(string emailHtml, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var urls = emailHtml.ToJobUrls();
+
+        if (urls is null || !urls.Any())
+        {
+            return [];
+        }
+
+        var results = new List<AnalysisResult>(urls.Count());
+
+        return results;
     }
 }
