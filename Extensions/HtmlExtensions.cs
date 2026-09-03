@@ -8,7 +8,7 @@ public static partial class HtmlExtensions
 {
     private static readonly int MaxLength = 8_000;
 
-    public static IEnumerable<string> ToJobUrls(this string html)
+    public static IList<string> ToJobUrls(this string html)
     {
         var jobCards = html.GetJobCards();
 
@@ -31,7 +31,7 @@ public static partial class HtmlExtensions
             jobUrls.Add(jobUrl);
         }
 
-        return jobUrls;
+        return [.. jobUrls];
     }
 
     public static string? ToPlainText(this string html)
@@ -96,6 +96,11 @@ public static partial class HtmlExtensions
             {
                 Query = string.Empty
             };
+
+            if (builder.Path.StartsWith("/comm", StringComparison.OrdinalIgnoreCase))
+            {
+                builder.Path = builder.Path["/comm".Length..];
+            }
 
             return WebUtility.HtmlDecode(builder.Uri.GetLeftPart(UriPartial.Path));
         }

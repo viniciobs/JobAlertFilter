@@ -1,6 +1,5 @@
 using System.Net.Http.Json;
 using System.Text.Json;
-using JobAlertFilter.Models;
 using JobAlertFilter.Options;
 using JobAlertFilter.Services.Providers.Abstractions;
 using Microsoft.Extensions.Options;
@@ -10,7 +9,7 @@ namespace JobAlertFilter.Services.Providers;
 public class OpenAIService(IOptions<AIProviderOptions> opts)
     : AiServiceBase(opts), IAiService
 {
-    public async Task<IList<AnalysisResult>> AnalyzeAsync(string prompt, CancellationToken cancellationToken)
+    public async Task<T> AnalyzeAsync<T>(string prompt, CancellationToken cancellationToken)
     {
         var request = new
         {
@@ -42,7 +41,7 @@ public class OpenAIService(IOptions<AIProviderOptions> opts)
             .GetProperty("content")
             .GetString();
 
-        return JsonSerializer.Deserialize<IList<AnalysisResult>>(
+        return JsonSerializer.Deserialize<T>(
             content!, SerializerOptions)
             ?? throw new JsonException("OpenAI returned invalid JSON.");
     }

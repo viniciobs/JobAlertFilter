@@ -27,6 +27,6 @@ public class EmailAnalyzer(
 
         var prompt = await promptLoader.LoadAsync("prompt-template", replacements);
 
-        return await aiService.AnalyzeAsync(prompt, cancellationToken);
+        return await aiService.AnalyzeAsync<IList<AnalysisResult>>(prompt, cancellationToken);
     }
 }

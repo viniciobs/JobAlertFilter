@@ -28,6 +28,7 @@ builder.Services
     .AddSingleton<OpenAIService>()
     .AddSingleton<EmailAnalyzer>()
     .AddSingleton<LinkedInAnalyzer>()
+    .AddScoped<LinkedInJobScraper>()
     .AddSingleton<ResultWriter>();
 
 builder.Services.AddSingleton<IJobAnalyzer>(sp =>

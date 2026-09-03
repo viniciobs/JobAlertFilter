@@ -40,7 +40,8 @@ It connects to your Gmail account via IMAP, reads unread emails from a specific 
             "ImapOperationTimeoutSeconds": 30, // Timeout (seconds) for retrieving emails only
             "ProcessSingleEmailTimeoutMinutes": 5, // Timeout (minutes) for processing each email
             "OutputDirectory": "C:/Users/User/Projects/JobAlertFilter/Results",
-            "AnalysisTarget": "email | linkedin" 
+            "AnalysisTarget": "email | linkedin",
+            "JobPageRequestDelaySeconds": 3 // Delay between requests to LinkedIn page. Used only AnalysisTarget is LinkedIn 
         },
         "Profile": {
             "WorkModes": ["Remote"],

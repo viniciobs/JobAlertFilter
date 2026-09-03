@@ -10,7 +10,7 @@ namespace JobAlertFilter.Services.Providers;
 public class OllamaService(IOptions<AIProviderOptions> opts)
     : AiServiceBase(opts), IAiService
 {
-    public async Task<IList<AnalysisResult>> AnalyzeAsync(
+    public async Task<T> AnalyzeAsync<T>(
         string prompt,
         CancellationToken cancellationToken)
     {
@@ -45,7 +45,7 @@ public class OllamaService(IOptions<AIProviderOptions> opts)
                 "Ollama returned an empty response.");
         }
 
-        return JsonSerializer.Deserialize<IList<AnalysisResult>>(
+        return JsonSerializer.Deserialize<T>(
             ollamaResponse.Response,
             SerializerOptions)
             ?? throw new JsonException(

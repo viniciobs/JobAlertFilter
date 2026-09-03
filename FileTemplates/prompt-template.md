@@ -50,8 +50,6 @@ MATCHING LOGIC
 - Minimum years of experience: the job should not require substantially more experience than the candidate has.
 - Languages: required languages should be compatible with the candidate's languages.
 
-If any required matching condition fails, isMatch MUST be false.
-
 Do not assume that information exists if it is not present in the job posting.
 Do not invent requirements or candidate information.
 Do not treat similar technologies as identical unless the job posting explicitly indicates they are equivalent.
@@ -99,9 +97,6 @@ reasoning:
 
 CONSISTENCY
 
-- If isMatch is true, confidenceScore should normally be 80 or higher.
-- If isMatch is false because of a required condition, confidenceScore should normally be below 80.
-- recommendation must be consistent with isMatch, confidenceScore, and the identified concerns.
 - If there is insufficient information, explicitly state which information is missing.
 
 IMPORTANT

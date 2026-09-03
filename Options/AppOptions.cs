@@ -10,6 +10,7 @@ public record AppOptions: IOptionValidator
     public int ProcessSingleEmailTimeoutMinutes { get; init; } = 5;
     public required string OutputDirectory { get; init; }
     public required string AnalysisTarget { get; set; }
+    public int JobPageRequestDelaySeconds { get; init; } = 10;
 
     public bool IsValid() =>
         !string.IsNullOrWhiteSpace(Email) &&
