@@ -1,5 +1,7 @@
 # Job Alert Filter
 
+[![.NET](https://img.shields.io/badge/.NET-11.0-green)](https://dotnet.microsoft.com/)
+
 A .NET console application that automatically filters and analyzes job alert emails using an AI model, matching each opportunity against your professional profile.
 
 It connects to your Gmail account via IMAP, reads unread job alert emails, and evaluates each opportunity in one of two modes:
